@@ -1,0 +1,100 @@
+Hadi Mutaqin || Test Programmer
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fungsi Menghitumg Tanggal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #tanggal-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #tanggal-list li {
+            padding: 4px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #tanggal-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Tanggal Bukan Minggu</h1>
+    Tanggal awal : <input type="text" id="tanggal-awal" value="02-09-2022" /> <br>
+    Tanggal Akhir : <input type="text" id="tanggal-akhir" value="06-03-2023" /> <br>
+    <button id="tampilkan-tanggal">Tampilkan Tanggal</button>
+    <button id="hitung-hari-sabtu-minggu">Hitung Hari Sabtu & Minggu</button>
+    <ul id="tanggal-list"></ul>
+    <p id="hasil-hitung-hari-sabtu-minggu">
+    </p>
+
+    <script>
+        const tanggalAwalInput = document.getElementById('tanggal-awal');
+        const tanggalAkhirInput = document.getElementById('tanggal-akhir');
+        const tampilkanTanggalButton = document.getElementById('tampilkan-tanggal');
+        const hitungHariSabtuMingguButton = document.getElementById('hitung-hari-sabtu-minggu');
+        const tanggalListElement = document.getElementById('tanggal-list');
+        const hasilHitungHariSabtuMingguElement = document.getElementById('hasil-hitung-hari-sabtu-minggu');
+
+        tampilkanTanggalButton.addEventListener('click', () => {
+            const tanggalAwal = tanggalAwalInput.value;
+            const tanggalAkhir = tanggalAkhirInput.value;
+            const tanggalList = tanggalBukanMinggu(tanggalAwal, tanggalAkhir);
+
+            tanggalListElement.innerHTML = '';
+            tanggalList.forEach((tanggal) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = tanggal;
+                tanggalListElement.appendChild(listItem);
+            });
+        });
+
+        // Hadi Mutaqin
+        hitungHariSabtuMingguButton.addEventListener('click', () => {
+            const tanggalAwal = tanggalAwalInput.value;
+            const tanggalAkhir = tanggalAkhirInput.value;
+            const startDate = new Date(tanggalAwal.split('-').reverse().join('-'));
+            const endDate = new Date(tanggalAkhir.split('-').reverse().join('-'));
+            let hariSabtu = 0;
+            let hariMinggu = 0;
+
+            while (startDate <= endDate) {
+                if (startDate.getDay() === 6) { // 6 untuk hari Sabtu
+                    hariSabtu++;
+                } else if (startDate.getDay() === 0) { // 0 untuk hari Minggu
+                    hariMinggu++;
+                }
+                startDate.setDate(startDate.getDate() + 1);
+            }
+
+            hasilHitungHariSabtuMingguElement.textContent = `Jumlah Hari Sabtu: ${hariSabtu}, Jumlah Hari Minggu: ${hariMinggu}`;
+        });
+
+        // Hadi Mutaqin
+        function tanggalBukanMinggu(tanggalAwal, tanggalAkhir) {
+            const startDate = new Date(tanggalAwal.split('-').reverse().join('-'));
+            const endDate = new Date(tanggalAkhir.split('-').reverse().join('-'));
+            const tanggalList = [];
+
+            while (startDate <= endDate) {
+                if (startDate.getDay() !== 0) { // 0 untuk hari Minggu
+                    tanggalList.push(`${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear()}`);
+                }
+                startDate.setDate(startDate.getDate() + 1);
+            }
+
+            return tanggalList;
+        }
+    </script>
+</body>
+
+</html>
